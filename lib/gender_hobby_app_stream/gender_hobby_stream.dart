@@ -6,6 +6,7 @@ class StreamGenderHobbyBloc {
   static String gender = 'gender', male = 'male', feMale = 'feMale';
   static bool isCricket = false, isFootball = false, isSinging = false;
   static double selectedAge = 0;
+  static int selecedIndex = 0;
   static bool submited = false;
   static List<String> selectHobbyList = [];
   static List<Map<String, dynamic>> userData = [];
@@ -128,8 +129,44 @@ class StreamGenderHobbyBloc {
     });
   }
 
+  static onTapAdd() {
+    txtNameEditingController.text = userData[selecedIndex]['name'];
+    txtMiddleNameEditingController.text = userData[selecedIndex]['middleName'];
+    txtLastNameEditingController.text = userData[selecedIndex]['lastName'];
+    gender = userData[selecedIndex]['gender'];
+    selectHobbyList = userData[selecedIndex]['hobby'].map((e) => e);
+    if (userData[selecedIndex]['hobby'].contains('Cricket')) {
+      isCricket = true;
+    }
+    if (userData[selecedIndex]['hobby'].contains('Football')) {
+      isFootball = true;
+    }
+    if (userData[selecedIndex]['hobby'].contains('Singing')) {
+      isSinging = true;
+    }
+    selectHobbyList.clear();
+  }
+
+  static onUpdatTapAdd() {
+    if (isCricket == true) {
+      selectHobbyList.add('Cricket');
+    }
+    if (isFootball == true) {
+      selectHobbyList.add('Football');
+    }
+    if (isSinging == true) {
+      selectHobbyList.add('Singing');
+    }
+    userData[selecedIndex]['name'] = txtNameEditingController.text;
+    userData[selecedIndex]['middleName'] = txtMiddleNameEditingController.text;
+    userData[selecedIndex]['lastName'] = txtLastNameEditingController.text;
+    userData[selecedIndex]['gender'] = gender;
+    userData[selecedIndex]['hobby'] = List.from(selectHobbyList.map((e) => e));
+  }
+
   static void clearData() {
     txtNameEditingController.clear();
+    txtMiddleNameEditingController.clear();
     txtLastNameEditingController.clear();
     gender = 'gender';
     selectHobbyList.clear();
