@@ -11,21 +11,40 @@ class GenderHobbyDemoUi extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
           children: [
-            TextField(
-              controller: StreamGenderHobbyBloc.txtNameEditingController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Name',
-                labelText: 'Name',
+            StreamBuilder(
+              stream: StreamGenderHobbyBloc.nameStreamController,
+              builder: (context, snapshot) => TextField(
+                controller: StreamGenderHobbyBloc.txtNameEditingController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Name',
+                  labelText: 'Name',
+                ),
               ),
             ),
             const SizedBox(height: 5),
-            TextField(
-              controller: StreamGenderHobbyBloc.txtLastNameEditingController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'LastName',
-                labelText: 'LastName',
+            StreamBuilder(
+              stream: StreamGenderHobbyBloc.middleNameStreamController,
+              builder: (context, snapshot) => TextField(
+                controller:
+                    StreamGenderHobbyBloc.txtMiddleNameEditingController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'MiddleName',
+                  labelText: 'MiddleName',
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            StreamBuilder(
+              stream: StreamGenderHobbyBloc.lastNameStreamController,
+              builder: (context, snapshot) => TextField(
+                controller: StreamGenderHobbyBloc.txtLastNameEditingController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'LastName',
+                  labelText: 'LastName',
+                ),
               ),
             ),
             const SizedBox(height: 5),
@@ -95,43 +114,77 @@ class GenderHobbyDemoUi extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 5),
+            StreamBuilder(
+              stream: StreamGenderHobbyBloc.ageStreamController,
+              builder: (context, snapshot) => Slider(
+                value: StreamGenderHobbyBloc.selectedAge,
+                onChanged: (value) {
+                  StreamGenderHobbyBloc.ageControllerValue =
+                      StreamGenderHobbyBloc.selectedAge = value;
+                },
+                min: 0,
+                max: 100,
+              ),
+            ),
+            const SizedBox(height: 5),
             ElevatedButton(
               onPressed: () {
-                StreamGenderHobbyBloc.submitControllerValue =
-                    StreamGenderHobbyBloc.submited =
-                        !StreamGenderHobbyBloc.submited;
                 StreamGenderHobbyBloc.addUserData();
+
+                print(StreamGenderHobbyBloc.userData);
+
+                // StreamGenderHobbyBloc.nameControllerValue =
+                //     StreamGenderHobbyBloc.txtNameEditingController.text;
+                // StreamGenderHobbyBloc.middleNameControllerValue =
+                //     StreamGenderHobbyBloc.txtMiddleNameEditingController.text;
+                //   StreamGenderHobbyBloc.lastNameControllerValue =
+                //       StreamGenderHobbyBloc.txtLastNameEditingController.text;
+                //   StreamGenderHobbyBloc.selectHobbyList.clear();
+                //   if (StreamGenderHobbyBloc.isCricket == true) {
+                //     StreamGenderHobbyBloc.selectHobbyList.add('Cricket');
+                //   }
+                //   if (StreamGenderHobbyBloc.isFootball == true) {
+                //     StreamGenderHobbyBloc.selectHobbyList.add('Football');
+                //   }
+                //   if (StreamGenderHobbyBloc.isSinging == true) {
+                //     StreamGenderHobbyBloc.selectHobbyList.add('Singing');
+                //   }
+                //   StreamGenderHobbyBloc.selectHobbyControllerValue =
+                //       StreamGenderHobbyBloc.selectHobbyList;
               },
               child: const Text('Submit'),
             ),
+
+            // StreamBuilder(
+            //   stream: StreamGenderHobbyBloc.nameStreamController,
+            //   builder: (context, snapshot) => Text('Name :${snapshot.data}'),
+            // ),
+            // StreamBuilder(
+            //   stream: StreamGenderHobbyBloc.middleNameStreamController,
+            //   builder: (context, snapshot) =>
+            //       Text('MiddleName :${snapshot.data}'),
+            // ),
+            // StreamBuilder(
+            //   stream: StreamGenderHobbyBloc.lastNameStreamController,
+            //   builder: (context, snapshot) =>
+            //       Text('LastName :${snapshot.data}'),
+            // ),
+            // StreamBuilder(
+            //   stream: StreamGenderHobbyBloc.genderStreamController,
+            //   builder: (context, snapshot) => Text('Gender :${snapshot.data}'),
+            // ),
+            // StreamBuilder(
+            //   stream: StreamGenderHobbyBloc.selectHobbyStreamController,
+            //   builder: (context, snapshot) => Text('Hobby :${snapshot.data}'),
+            // ),
+            // StreamBuilder(
+            //   stream: StreamGenderHobbyBloc.ageStreamController,
+            //   builder: (context, snapshot) => Text('Age :${snapshot.data}'),
+            // ),
             const SizedBox(height: 5),
-            StreamBuilder(
-              builder: (context, snapshot) =>
-                  StreamGenderHobbyBloc.userData.isEmpty
-                      ? const Text('There is not data')
-                      : Expanded(
-                          child: ListView.builder(
-                            itemCount: StreamGenderHobbyBloc.userData.length,
-                            itemBuilder: (context, index) => Container(
-                              height: 200,
-                              width: double.infinity,
-                              color: Colors.tealAccent,
-                              child: Column(
-                                children: [
-                                  StreamBuilder(
-                                    stream: StreamGenderHobbyBloc
-                                        .genderStreamController,
-                                    builder: (context, snapshot) => Text(
-                                      StreamGenderHobbyBloc.userData[index]
-                                          ['gender'],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-            ),
+            StreamGenderHobbyBloc.submited
+                ? const Text('There is not data')
+                : Container(),
           ],
         ),
       ),
