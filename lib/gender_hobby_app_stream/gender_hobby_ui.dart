@@ -114,77 +114,80 @@ class GenderHobbyDemoUi extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 5),
+            // StreamBuilder(
+            //   stream: StreamGenderHobbyBloc.ageStreamController,
+            //   builder: (context, snapshot) => Slider(
+            //     value: StreamGenderHobbyBloc.selectedAge,
+            //     onChanged: (value) {
+            //       StreamGenderHobbyBloc.ageControllerValue =
+            //           StreamGenderHobbyBloc.selectedAge = value;
+            //     },
+            //     min: 0,
+            //     max: 100,
+            //   ),
+            // ),
+            const SizedBox(height: 5),
             StreamBuilder(
-              stream: StreamGenderHobbyBloc.ageStreamController,
-              builder: (context, snapshot) => Slider(
-                value: StreamGenderHobbyBloc.selectedAge,
-                onChanged: (value) {
-                  StreamGenderHobbyBloc.ageControllerValue =
-                      StreamGenderHobbyBloc.selectedAge = value;
+              stream: StreamGenderHobbyBloc.submitStreamController,
+              builder: (context, snapshot) => ElevatedButton(
+                onPressed: () {
+                  StreamGenderHobbyBloc.submitControllerValue =
+                      StreamGenderHobbyBloc.submited = true;
+
+                  StreamGenderHobbyBloc.addUserData();
+                  StreamGenderHobbyBloc.userDataControllerValue =
+                      StreamGenderHobbyBloc.userData;
+                  StreamGenderHobbyBloc.clearData();
+                  StreamGenderHobbyBloc.submitControllerValue =
+                      StreamGenderHobbyBloc.submited = false;
                 },
-                min: 0,
-                max: 100,
+                child: const Text('Submit'),
               ),
             ),
             const SizedBox(height: 5),
-            ElevatedButton(
-              onPressed: () {
-                StreamGenderHobbyBloc.addUserData();
-
-                print(StreamGenderHobbyBloc.userData);
-
-                // StreamGenderHobbyBloc.nameControllerValue =
-                //     StreamGenderHobbyBloc.txtNameEditingController.text;
-                // StreamGenderHobbyBloc.middleNameControllerValue =
-                //     StreamGenderHobbyBloc.txtMiddleNameEditingController.text;
-                //   StreamGenderHobbyBloc.lastNameControllerValue =
-                //       StreamGenderHobbyBloc.txtLastNameEditingController.text;
-                //   StreamGenderHobbyBloc.selectHobbyList.clear();
-                //   if (StreamGenderHobbyBloc.isCricket == true) {
-                //     StreamGenderHobbyBloc.selectHobbyList.add('Cricket');
-                //   }
-                //   if (StreamGenderHobbyBloc.isFootball == true) {
-                //     StreamGenderHobbyBloc.selectHobbyList.add('Football');
-                //   }
-                //   if (StreamGenderHobbyBloc.isSinging == true) {
-                //     StreamGenderHobbyBloc.selectHobbyList.add('Singing');
-                //   }
-                //   StreamGenderHobbyBloc.selectHobbyControllerValue =
-                //       StreamGenderHobbyBloc.selectHobbyList;
-              },
-              child: const Text('Submit'),
-            ),
-
-            // StreamBuilder(
-            //   stream: StreamGenderHobbyBloc.nameStreamController,
-            //   builder: (context, snapshot) => Text('Name :${snapshot.data}'),
-            // ),
-            // StreamBuilder(
-            //   stream: StreamGenderHobbyBloc.middleNameStreamController,
-            //   builder: (context, snapshot) =>
-            //       Text('MiddleName :${snapshot.data}'),
-            // ),
-            // StreamBuilder(
-            //   stream: StreamGenderHobbyBloc.lastNameStreamController,
-            //   builder: (context, snapshot) =>
-            //       Text('LastName :${snapshot.data}'),
-            // ),
-            // StreamBuilder(
-            //   stream: StreamGenderHobbyBloc.genderStreamController,
-            //   builder: (context, snapshot) => Text('Gender :${snapshot.data}'),
-            // ),
-            // StreamBuilder(
-            //   stream: StreamGenderHobbyBloc.selectHobbyStreamController,
-            //   builder: (context, snapshot) => Text('Hobby :${snapshot.data}'),
-            // ),
-            // StreamBuilder(
-            //   stream: StreamGenderHobbyBloc.ageStreamController,
-            //   builder: (context, snapshot) => Text('Age :${snapshot.data}'),
-            // ),
-            const SizedBox(height: 5),
-            StreamGenderHobbyBloc.submited
-                ? const Text('There is not data')
-                : Container(),
+            StreamBuilder(
+              stream: StreamGenderHobbyBloc.userDataStreamController,
+              builder: (context, snapshot) => StreamGenderHobbyBloc
+                      .userData.isNotEmpty
+                  ? Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) => GestureDetector(
+                          onTap: () {
+                            StreamGenderHobbyBloc.selecedIndex = index;
+                            StreamGenderHobbyBloc.onTapAdd();
+                            StreamGenderHobbyBloc.onUpdatTapAdd();
+                          },
+                          child: Dismissible(
+                            key: UniqueKey(),
+                            onDismissed: (direction) {
+                              StreamGenderHobbyBloc.userData.removeAt(index);
+                            },
+                            child: Container(
+                              height: 100,
+                              width: double.infinity,
+                              color: Colors.amber,
+                              child: Column(
+                                children: [
+                                  Text(
+                                      'Name : ${snapshot.data![index]['name']}'),
+                                  Text(
+                                      'MiddleName : ${snapshot.data![index]['middleName']}'),
+                                  Text(
+                                      'LastName : ${snapshot.data![index]['lastName']}'),
+                                  Text(
+                                      'Gender : ${snapshot.data![index]['gender']}'),
+                                  Text(
+                                      'Hobby : ${snapshot.data![index]['hobby']}'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : const Text('There is no data'),
+            )
           ],
         ),
       ),
