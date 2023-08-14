@@ -138,8 +138,6 @@ class GenderHobbyDemoUi extends StatelessWidget {
                   StreamGenderHobbyBloc.userDataControllerValue =
                       StreamGenderHobbyBloc.userData;
                   StreamGenderHobbyBloc.clearData();
-                  StreamGenderHobbyBloc.submitControllerValue =
-                      StreamGenderHobbyBloc.submited = false;
                 },
                 child: const Text('Submit'),
               ),
